@@ -1,49 +1,71 @@
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.Scanner;
 
-public class BlackJackModel extends Deck{
+public class BlackJackModel extends AbstractPlayer {
 
-//    Methods: prepDeck (create and shuffle), deal hands to players,
-//    isGameOver? (loops through players to see their score and determine if there is a winner).
-//    Tests for BlackJack
-    private ArrayList<Card> playingDeck;
-    private ArrayList<Players> blackJackPlayer;
-    private Players dealer;
-    private Players currentPlayer;
+    public static void main(String[] args) {
+        System.out.println("Welcome to your BlackJack Game");
 
+        Scanner input = new Scanner(System.in);
 
-    public BlackJackModel(ArrayList<Card> originalDeckList, ArrayList<Card> playingDeck,
-                          ArrayList<Players> blackJackPlayer, Players dealer, Players currentPlayer) {
-        super(originalDeckList);
-        this.playingDeck = playingDeck;
-        this.blackJackPlayer = blackJackPlayer;
-        this.dealer = dealer;
-        this.currentPlayer = currentPlayer;
-    }
+        boolean playerRoundOver = false;
+        boolean dealerRoundOver = false;
 
-    public ArrayList<Card> getDeck() {
-        return new ArrayList<>(playingDeck);
-    }
+        // create a new deck of cards shuffles and ready to deal
+        Deck blackJackDeck = new Deck();
+        blackJackDeck.shuffle();
 
-    public void shuffle() {
-        ArrayList<Card> shuffledDeck = new ArrayList<>();
-        Random randomise = new Random();
-        while (!playingDeck.isEmpty()) {
-            int random = randomise.nextInt(playingDeck.size());
-            shuffledDeck.add(playingDeck.remove(random));
+        // new players - betting player and dealer
+        Player bettingPlayer = new Player();
+        Player dealer = new Player();
+
+//        // create deck for player and dealer
+//        Deck playerDeck = new Deck();
+//        Deck dealerDeck = new Deck();
+//
+//        // player gets two cards from deck
+//        playerDeck.add(blackJackDeck.takeTopCard());
+//        playerDeck.add(blackJackDeck.takeTopCard());
+//
+//        // dealer gets two cards from deck
+//        dealerDeck.add(blackJackDeck.takeTopCard());
+//        dealerDeck.add(blackJackDeck.takeTopCard());
+
+        // Players round
+        while(!playerRoundOver) {
+            System.out.println("1. Hit \t 2. Stand");
+            int answer = input.nextInt();
+            if (answer == 1) {
+                bettingPlayer.hit(blackJackDeck);
+                if (bettingPlayer.isOver21()) {
+                    System.out.println("Player Busts. Dealer wins!");
+                }
+            } else if (answer == 2) {
+                bettingPlayer.stand();
+            } else {
+                playerRoundOver = true;
+            }
         }
-        this.playingDeck = shuffledDeck;
-    }
 
-    private boolean isEmpty() {
-        return this.playingDeck.size() == 0;
-    }
-
-    public Card dealCards(){
-        for (player:Players) {
-            dealCards();
+        // Dealers round
+        while(!dealerRoundOver) {
+            if (dealer.getCurrentHandValue() > bettingPlayer.getCurrentHandValue()) {
+                System.out.println("Dealer wins");
+            } else if (dealer.getCurrentHandValue() < 17) {
+                dealer.hit(blackJackDeck);
+            } else if (dealer.isOver21()) {
+                System.out.println("Dealer Busts. You win!");
+            } else {
+                // player value must be higher than dealer value so
+                // the player wins
+                System.out.println("Player wins");
+                dealerRoundOver =true;
+            }
         }
+
     }
 
+    @Override
+    public void hit(Deck deck) {
 
+    }
 }
