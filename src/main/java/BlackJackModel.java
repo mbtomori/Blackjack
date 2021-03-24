@@ -15,33 +15,36 @@ public class BlackJackModel extends AbstractPlayer {
         blackJackDeck.shuffle();
 
         // new players - betting player and dealer
-        Hand playerHand = new Hand();
-        Hand dealerHand = new Hand();
-        Player bettingPlayer = new Player();
-        Player dealer = new Player();
+        Hand playerHand = new Hand(2);
+        Hand dealerHand = new Hand(2);
+        Player bettingPlayer = new Player(playerHand);
+        Player dealer = new Player(dealerHand);
 
+//        playerHand.add(blackJackDeck.takeTopCard());
+//        playerHand.add(blackJackDeck.takeTopCard());
+//
+//        dealerHand.add(blackJackDeck.takeTopCard());
+//        dealerHand.add(blackJackDeck.takeTopCard());
 
-//
-//        // player gets two cards from deck
-//        playerDeck.add(blackJackDeck.takeTopCard());
-//        playerDeck.add(blackJackDeck.takeTopCard());
-//
-//        // dealer gets two cards from deck
-//        dealerDeck.add(blackJackDeck.takeTopCard());
-//        dealerDeck.add(blackJackDeck.takeTopCard());
 
         // Players round
         while(!playerRoundOver) {
-            bettingPlayer.;
+            bettingPlayer.hit(blackJackDeck);
+            bettingPlayer.hit(blackJackDeck);
+            // how do i print out what the player has?
+            System.out.println(bettingPlayer.getCurrentHandValue());
             System.out.println("Hello Player!\nWould you like to 1. Hit \t 2. Stand");
             int answer = input.nextInt();
             if (answer == 1) {
+                System.out.println("Player chose to hit");
                 bettingPlayer.hit(blackJackDeck);
+                // print out what the player has again
                 if (bettingPlayer.isOver21()) {
                     System.out.println("Player Busts. Dealer wins!");
                 }
             }
             else if (answer == 2) {
+                System.out.println("Player chose to stand");
                 bettingPlayer.stand();
             }
             else {
@@ -51,12 +54,14 @@ public class BlackJackModel extends AbstractPlayer {
 
         // Dealers round
         while(!dealerRoundOver) {
+            dealer.hit(blackJackDeck);
+            dealer.hit(blackJackDeck);
             if (dealer.getCurrentHandValue() > bettingPlayer.getCurrentHandValue()) {
                 System.out.println("Dealer wins");
             } else if (dealer.getCurrentHandValue() < 17) {
                 dealer.hit(blackJackDeck);
             } else if (dealer.isOver21()) {
-                System.out.println("Dealer Busts. You win!");
+                System.out.println("Dealer Busts. Player wins!");
             } else {
                 // player value must be higher than dealer value so
                 // the player wins
@@ -67,6 +72,7 @@ public class BlackJackModel extends AbstractPlayer {
 
     }
 
+    // not sure what to do with the information below or how to go about testing this
     @Override
     public void hit(Deck deck) {
 
