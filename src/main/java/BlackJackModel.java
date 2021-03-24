@@ -15,12 +15,12 @@ public class BlackJackModel extends AbstractPlayer {
         blackJackDeck.shuffle();
 
         // new players - betting player and dealer
+        Hand playerHand = new Hand();
+        Hand dealerHand = new Hand();
         Player bettingPlayer = new Player();
         Player dealer = new Player();
 
-//        // create deck for player and dealer
-//        Deck playerDeck = new Deck();
-//        Deck dealerDeck = new Deck();
+
 //
 //        // player gets two cards from deck
 //        playerDeck.add(blackJackDeck.takeTopCard());
@@ -32,16 +32,19 @@ public class BlackJackModel extends AbstractPlayer {
 
         // Players round
         while(!playerRoundOver) {
-            System.out.println("1. Hit \t 2. Stand");
+            bettingPlayer.;
+            System.out.println("Hello Player!\nWould you like to 1. Hit \t 2. Stand");
             int answer = input.nextInt();
             if (answer == 1) {
                 bettingPlayer.hit(blackJackDeck);
                 if (bettingPlayer.isOver21()) {
                     System.out.println("Player Busts. Dealer wins!");
                 }
-            } else if (answer == 2) {
+            }
+            else if (answer == 2) {
                 bettingPlayer.stand();
-            } else {
+            }
+            else {
                 playerRoundOver = true;
             }
         }
