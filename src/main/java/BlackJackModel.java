@@ -9,6 +9,7 @@ public class BlackJackModel extends AbstractPlayer {
 
         boolean playerRoundOver = false;
         boolean dealerRoundOver = false;
+        boolean gameOver = false;
 
         // create a new deck of cards shuffles and ready to deal
         Deck blackJackDeck = new Deck();
@@ -20,54 +21,64 @@ public class BlackJackModel extends AbstractPlayer {
         Player bettingPlayer = new Player(playerHand);
         Player dealer = new Player(dealerHand);
 
-//        playerHand.add(blackJackDeck.takeTopCard());
-//        playerHand.add(blackJackDeck.takeTopCard());
-//
-//        dealerHand.add(blackJackDeck.takeTopCard());
-//        dealerHand.add(blackJackDeck.takeTopCard());
-
 
         // Players round
-        while(!playerRoundOver) {
-            bettingPlayer.hit(blackJackDeck);
-            bettingPlayer.hit(blackJackDeck);
-            // how do i print out what the player has?
-            System.out.println(bettingPlayer.getCurrentHandValue());
-            System.out.println("Hello Player!\nWould you like to 1. Hit \t 2. Stand");
-            int answer = input.nextInt();
-            if (answer == 1) {
-                System.out.println("Player chose to hit");
+        try {
+            while (!playerRoundOver && !gameOver) {
                 bettingPlayer.hit(blackJackDeck);
-                // print out what the player has again
-                if (bettingPlayer.isOver21()) {
-                    System.out.println("Player Busts. Dealer wins!");
+                bettingPlayer.hit(blackJackDeck);
+
+                System.out.println("Hello Player!");
+
+                // how do i print out the actual card the player has?
+                System.out.println("Your card value is " + bettingPlayer.getCurrentHandValue());
+
+                if (bettingPlayer.getCurrentHandValue() == 21){
+                    System.out.println("Player wins with a BlackJack");
+                    gameOver = true;
+                }
+                else {
+                    System.out.println("Would you like to 1. Hit \t 2. Stand");
+                    int answer = input.nextInt();
+                    if (answer == 1) {
+                        System.out.println("Player chose to hit");
+                        bettingPlayer.hit(blackJackDeck);
+                        System.out.println(bettingPlayer.getCurrentHandValue());
+                        // print out the actual card the player has again
+                        if (bettingPlayer.isOver21()) {
+                            System.out.println("Player Busts. Dealer wins!");
+                            gameOver = true;
+                        }
+                    } else if (answer == 2) {
+                        System.out.println("Player chose to stand");
+                        bettingPlayer.stand();
+                        playerRoundOver = true;
+                    }
                 }
             }
-            else if (answer == 2) {
-                System.out.println("Player chose to stand");
-                bettingPlayer.stand();
-            }
-            else {
-                playerRoundOver = true;
-            }
-        }
 
-        // Dealers round
-        while(!dealerRoundOver) {
-            dealer.hit(blackJackDeck);
-            dealer.hit(blackJackDeck);
-            if (dealer.getCurrentHandValue() > bettingPlayer.getCurrentHandValue()) {
-                System.out.println("Dealer wins");
-            } else if (dealer.getCurrentHandValue() < 17) {
+            // Dealers round
+            while (!dealerRoundOver) {
                 dealer.hit(blackJackDeck);
-            } else if (dealer.isOver21()) {
-                System.out.println("Dealer Busts. Player wins!");
-            } else {
-                // player value must be higher than dealer value so
-                // the player wins
-                System.out.println("Player wins");
-                dealerRoundOver =true;
+                dealer.hit(blackJackDeck);
+                if (dealer.getCurrentHandValue() > bettingPlayer.getCurrentHandValue()) {
+                    System.out.println("Dealer wins");
+                    gameOver = true;
+                } else if (dealer.getCurrentHandValue() < 17) {
+                    dealer.hit(blackJackDeck);
+                } else if (dealer.isOver21()) {
+                    System.out.println("Dealer Busts. Player wins!");
+                    gameOver = true;
+                } else {
+                    // player value must be higher than dealer value so
+                    // the player wins
+                    System.out.println("Player wins");
+                    dealerRoundOver = true;
+                }
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -78,3 +89,4 @@ public class BlackJackModel extends AbstractPlayer {
 
     }
 }
+
