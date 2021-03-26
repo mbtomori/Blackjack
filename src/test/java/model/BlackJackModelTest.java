@@ -61,8 +61,13 @@ public class BlackJackModelTest {
 
     @Test
     public void findWinners() {
-//        assertTrue("WIN", player1.getCurrentHandValue() > dealer1.getCurrentHandValue());
-//        assertEquals("WIN", );
+        hand1.add(new Card(Suit.SPADES, Name.SIX));
+        hand2.add(new Card(Suit.DIAMONDS, Name.THREE));
+        hand3.add(new Card(Suit.SPADES, Name.FIVE));
+
+        assertTrue("WIN", player1.getCurrentHandValue() > dealer1.getCurrentHandValue());
+        assertFalse("WIN",player1.getCurrentHandValue() < dealer1.getCurrentHandValue());
+        assertFalse("WIN",player3.getCurrentHandValue() > dealer1.getCurrentHandValue());
     }
 
     @Test
@@ -84,7 +89,6 @@ public class BlackJackModelTest {
         assertTrue("LOSE", player2.getCurrentHandValue() < dealer1.getCurrentHandValue());
         assertFalse("LOSE",player1.getCurrentHandValue() < dealer1.getCurrentHandValue());
         assertFalse("LOSE",player3.getCurrentHandValue() > dealer1.getCurrentHandValue());
-
     }
 
     @Test
@@ -96,14 +100,11 @@ public class BlackJackModelTest {
 
         assertTrue("WIN", dealer1.getCurrentHandValue() > 21);
         assertTrue("LOSE", player1.getCurrentHandValue() > 21);
-
     }
-
 
     @Test
     public void getOutcomes() {
         endOutcomes.put(player1.getName(), BlackJackModel.Outcome.WIN);
         assertEquals(BlackJackModel.Outcome.WIN,endOutcomes.get(player1.getName()));
-
     }
 }
