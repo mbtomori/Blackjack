@@ -13,7 +13,8 @@ public class BlackJackModel {
     private Deck deck;
     private Dealer dealer;
     private ArrayList<Player> players;
-    private HashMap<String, ArrayList> outcomes;
+    private HashMap<String,Enum> outcomes;
+
 
     /**
      * The constructor for BlackJack takes a list of player names(as Strings) and
@@ -42,7 +43,7 @@ public class BlackJackModel {
         for (String name : playerNames) {
             players.add(new Player(name, this.dealInitialHand()));
         }
-        // add player names to hashmap
+
     }
 
     /**
@@ -63,7 +64,7 @@ public class BlackJackModel {
 
     /**
      * This helper method deals an initial hand to a player.
-     * @return
+     * @return the hand of the player
      */
     private Hand dealInitialHand() {
         return new Hand(deck, 2);
@@ -74,58 +75,92 @@ public class BlackJackModel {
              player.hit(this.deck);
          }
     }
-/*
-    public void findWinners() {
-         setUpOutcomes();
-         iterate through players list to get current hand value
-         if hasPlayerBusted()
-             updateOutcomes(player, LOSE)
-         else if hasDealerBusted()
-             updateOutcomes(dealer, LOSE)
-         else hasPlayerWon()
-             updateOutcomes(player, Won)
-         else hasPlayerTied()
-             updateOutcomes(player, TIE)
-         else
-             updateOutcomes(player, LOSE)
 
-    }
-
-    // if we decide to have the keys be the String for Winners, Losers, or Ties
+    /**
+     * This function helps set up the outcome hashtable
+     */
     private void setUpOutcomes() {
-         outcomes = new HashMap<String, ArrayList<String>();
-         outcomes.put("Winners");
-         outcomes.put("Losers";
-         outcome.put("Ties");
+        outcomes = new HashMap<String,Enum>();
+        for (Player player : this.players) {
+            outcomes.put(player.getName(), null);
+        }
     }
 
+    /**
+     * This function checks the criteria for winning / losing for each player
+     */
+    public void findWinners() {
+        setUpOutcomes();
+        for (Player player : players) {
+            if (hasPlayerBusted(player)) {
+                updateOutcomes(player, Outcome.LOSE);
+            }
+            else if (hasPlayerWon(player)) {
+                updateOutcomes(player, Outcome.WIN);
+            }
+            else if (hasPlayerTied(player)) {
+                updateOutcomes(player, Outcome.TIE);
+            }
+        }
+    }
+
+    /**
+     * Boolean function to check if the dealer busted
+     * @return false otherwise
+     */
     private boolean hasDealerBusted() {
-        dealer.getCurrentHandValue() > 21;
-        return true;
+        return dealer.getCurrentHandValue() > 21;
     }
 
+    /**
+     * Boolean function to check if the player busted
+     * @return false otherwise
+     */
     private boolean hasPlayerBusted(Player player) {
-        currentPlayer.getCurrentHandValue() > 21;
-        return true;
+        return player.getCurrentHandValue() > 21;
     }
 
+    /**
+     * Boolean function to check if the player won
+     * @return false otherwise
+     */
     private boolean hasPlayerWon(Player player) {
-        // currentPlayer.getCurrentHandValue() > dealer.getCurrentHandValue()
-        return true;
+        return player.getCurrentHandValue() > dealer.getCurrentHandValue()
+                || hasDealerBusted();
     }
 
+    /**
+     * Boolean function to check if the game ended in a tie
+     * @return false otherwise
+     */
     private boolean hasPlayerTied(Player player) {
-        // currentPlayer.getCurrentHandValue() == dealer.getCurrentHandValue()
-        return true;
+        return player.getCurrentHandValue() == dealer.getCurrentHandValue();
     }
 
-    private void updateOutcomes(Player player, Outcome outcome) {
-        // set Player value to outcome (Win, Lose, Tie)
+    /**
+     * This function is used to update the values of the hashmaps with their appropriate status
+     * @param player the current player
+     * @param status the players status
+     */
+    private void updateOutcomes(Player player, Outcome status) {
+        outcomes.put(player.getName(),status);
     }
 
-    public HashMap getOutcomes() {
-//        return the Hashmap;
+    /**
+     * Getter function for the hashmap
+     * @return the outcomes hashmaps
+     */
+    public HashMap<String,Enum> getOutcomes() {
+        return outcomes;
     }
-    */
+
+    /**
+     * Enum function for the possible outcomes
+     */
+    enum Outcome {
+        WIN, LOSE, TIE
+    }
 
 }
+
+
