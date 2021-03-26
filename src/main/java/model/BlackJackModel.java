@@ -95,13 +95,6 @@ public class BlackJackModel {
             if (hasPlayerBusted(player)) {
                 updateOutcomes(player, Outcome.LOSE);
             }
-            else if (hasDealerBusted()) {
-                if (hasPlayerBusted(player)) {
-                    updateOutcomes(player, Outcome.LOSE);
-                } else {
-                    updateOutcomes(player, Outcome.WIN);
-                }
-            }
             else if (hasPlayerWon(player)) {
                 updateOutcomes(player, Outcome.WIN);
             }
