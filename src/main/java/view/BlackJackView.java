@@ -28,7 +28,7 @@ public class BlackJackView {
                     - 'H' to hit and get another card from the dealer. 
                     - 'S' to stand and finish your turn.
                     - 'Q' to quit the game. 
-                Are you ready to play? Press any key except 'Q' (+ enter) to get started!
+                Are you ready to play? Press (enter) then any key except 'Q' (+ enter) to get started!
                 """;
         print(instructions);
     }
