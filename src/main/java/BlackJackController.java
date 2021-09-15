@@ -23,9 +23,8 @@ public class BlackJackController {
 
     /**
      * This no-argument constructor initializes a new game.
-     * @throws InterruptedException when the thread is interrupted due to sleeping.
      */
-    public BlackJackController() throws InterruptedException {
+    public BlackJackController() {
         this.view = new BlackJackView();
         this.keyboard = new Scanner(System.in);
         startGame();
@@ -78,19 +77,31 @@ public class BlackJackController {
      * names, it will initialize the BlackJackModel with the names from the user.
      */
     private void createPlayers() {
-        ArrayList<String> names = new ArrayList<>();
+        ArrayList<String> players = new ArrayList<>();
         for (int i = 0; i < this.numPlayers; i++) {
             this.view.getPlayerName(i + 1);
             String playerName = getUserInputAsString();
-            while (names.contains(playerName)) {
+            validatePlayerName(players, playerName);
+        }
+        this.model = new BlackJackModel(players);
+        this.view.printPlayerNameConfirmation(players);
+    }
+
+    /**
+     * This method validates and adds names to the player list. If the name is not unique, it repeats.
+     * @param players a list of players
+     * @param playerName a name to add to the list of players
+     */
+    private void validatePlayerName(ArrayList<String> players, String playerName) {
+        if (!players.isEmpty()) {
+            playerName = playerName.substring(0,1).toUpperCase() + playerName.substring(1);
+            while (players.contains(playerName)) {
                 view.printGetNonDuplicateName(playerName);
                 playerName = getUserInputAsString();
             }
-            playerName = playerName.substring(0,1).toUpperCase() + playerName.substring(1);
-            names.add(playerName);
         }
-        this.model = new BlackJackModel(names);
-        this.view.printPlayerNameConfirmation(names);
+        playerName = playerName.substring(0,1).toUpperCase() + playerName.substring(1);
+        players.add(playerName);
     }
 
     /**
@@ -121,7 +132,7 @@ public class BlackJackController {
             this.view.displayPlayerHand(player);
             if (player.hasBlackjack()) {
                 this.view.printPlayerBlackjackDialog();
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(1);
                 return;
             }
             if (player.isOver21()) {
@@ -195,7 +206,7 @@ public class BlackJackController {
                 this.view.displayDealerLastHand(dealer);
                 dealerHits();
             }
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(1);
             this.view.printDealerTurnOverDialog(dealer);
         }
         catch (Exception e) {
@@ -224,7 +235,6 @@ public class BlackJackController {
             }
             processDealerTurn();
             view.printGameOverDialog();
-            TimeUnit.SECONDS.sleep(2);
             processOutcomes();
             quitGame();
         }
@@ -264,7 +274,7 @@ public class BlackJackController {
         System.exit(0);
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new BlackJackController();
     }
 
