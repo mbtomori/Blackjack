@@ -23,9 +23,8 @@ public class BlackJackController {
 
     /**
      * This no-argument constructor initializes a new game.
-     * @throws InterruptedException when the thread is interrupted due to sleeping.
      */
-    public BlackJackController() throws InterruptedException {
+    public BlackJackController() {
         this.view = new BlackJackView();
         this.keyboard = new Scanner(System.in);
         startGame();
@@ -275,7 +274,7 @@ public class BlackJackController {
         System.exit(0);
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new BlackJackController();
     }
 
